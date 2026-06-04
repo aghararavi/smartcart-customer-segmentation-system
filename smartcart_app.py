@@ -185,12 +185,11 @@ with st.sidebar:
 
 
 # ── Load Data ─────────────────────────────────────────────────────────────────
-if uploaded:
-    data_path = uploaded
-else:
+
+
     data_path = "smartcart_customers.csv"
 
-try:
+
     df_raw, df_clean, df_enc, X_pca, pca = load_and_process(data_path)
     labels = run_clustering(X_pca.tolist(), n_clusters, algo)
     df_enc = df_enc.copy()
@@ -198,18 +197,14 @@ try:
     df_raw_full = df_raw.copy()
     df_raw_full = df_raw_full.loc[df_enc.index]
     df_raw_full["Cluster"] = labels
-    DATA_OK = True
-except FileNotFoundError:
-    DATA_OK = False
+
 
 # ── HEADER ────────────────────────────────────────────────────────────────────
 st.markdown("# 🛒 SmartCart Clustering System")
 st.markdown("Customer segmentation using unsupervised machine learning · KMeans & Agglomerative")
 st.markdown("---")
 
-if not DATA_OK:
-    st.warning("⚠️ `smartcart_customers.csv` not found. Upload it in the sidebar or place it in the same folder.")
-    st.stop()
+
 
 # ── KPI Metrics ───────────────────────────────────────────────────────────────
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -283,7 +278,7 @@ with tab1:
             )
             fig.update_xaxes(showgrid=False)
             fig.update_yaxes(gridcolor="#1e2a40")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     with c2:
         if "Income" in summary.columns:
@@ -302,7 +297,8 @@ with tab1:
             )
             fig.update_xaxes(showgrid=False)
             fig.update_yaxes(gridcolor="#1e2a40")
-            st.plotly_chart(fig, use_container_width=True)
+
+            st.plotly_chart(fig, width="stretch")
 
     # Scatter: Income vs Spending
     st.markdown("## Income vs Total Spending")
@@ -325,7 +321,7 @@ with tab1:
         )
         fig.update_xaxes(gridcolor="#1e2a40")
         fig.update_yaxes(gridcolor="#1e2a40")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Cluster Summary Table
     st.markdown("## Cluster Feature Averages")
@@ -336,12 +332,12 @@ with tab1:
         summary[show_cols].round(1).style
             .background_gradient(cmap="Blues", axis=0)
             .format("{:.1f}"),
-        use_container_width=True,
+        width="stretch",
     )
 
 # ═══════════════════════════════════════════════════════════════
 # TAB 2 — EDA & FEATURES
-# ═══════════════════════════════════════════════════════════════
+# ══════════════════════════════════
 with tab2:
     st.markdown("## Exploratory Data Analysis")
 
@@ -364,7 +360,7 @@ with tab2:
         )
         fig.update_xaxes(gridcolor="#1e2a40")
         fig.update_yaxes(gridcolor="#1e2a40")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with c2:
         fig = px.box(
@@ -380,7 +376,7 @@ with tab2:
         )
         fig.update_xaxes(gridcolor="#1e2a40")
         fig.update_yaxes(gridcolor="#1e2a40")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Correlation heatmap
     st.markdown("## Correlation Heatmap")
@@ -399,7 +395,7 @@ with tab2:
         title_font_color="#00e5ff",
         coloraxis_colorbar=dict(tickfont_color="#e2e8f0"),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # PCA variance
     st.markdown("## PCA — Explained Variance")
@@ -424,12 +420,11 @@ with tab2:
     )
     fig.update_yaxes(gridcolor="#1e2a40", secondary_y=False)
     fig.update_yaxes(gridcolor="#1e2a40", secondary_y=True)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 # ═══════════════════════════════════════════════════════════════
 # TAB 3 — K SELECTION
-# ═══════════════════════════════════════════════════════════════
-with tab3:
+# ══════════════════════════════════════════
     st.markdown("## Optimal K — Elbow & Silhouette")
 
     with st.spinner("Computing scores for k = 2…10 …"):
@@ -464,7 +459,7 @@ with tab3:
     fig.update_xaxes(gridcolor="#1e2a40", title="Number of Clusters (k)")
     fig.update_yaxes(gridcolor="#1e2a40", title="WCSS", secondary_y=False)
     fig.update_yaxes(title="Silhouette Score", secondary_y=True)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # Table
     k_df = pd.DataFrame({
@@ -473,7 +468,7 @@ with tab3:
         "Silhouette": [round(s, 4) for s in sil],
     })
     k_df["Selected"] = k_df["k"].apply(lambda x: "✅" if x == n_clusters else "")
-    st.dataframe(k_df.set_index("k"), use_container_width=True)
+    st.dataframe(k_df.set_index("k"), width="stretch")
 
     st.markdown("""
     <div class="info-box">
