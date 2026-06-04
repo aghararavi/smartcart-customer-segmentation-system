@@ -170,9 +170,6 @@ with st.sidebar:
     st.markdown("### 🛒 SmartCart")
     st.markdown("---")
 
-    uploaded = st.file_uploader("Upload CSV", type=["csv"], help="Upload smartcart_customers.csv")
-    st.markdown("---")
-
     algo = st.selectbox("Clustering Algorithm", ["Agglomerative (Ward)", "KMeans"])
     n_clusters = st.slider("Number of Clusters (k)", 2, 8, 4)
     st.markdown("---")
@@ -517,7 +514,7 @@ with tab4:
         legend_title_text="Cluster",
         height=600,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     # Cluster size donut
     st.markdown("## Cluster Size Distribution")
@@ -534,7 +531,7 @@ with tab4:
         title_font_color="#00e5ff",
         legend=dict(bgcolor="#0e1420"),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 # ═══════════════════════════════════════════════════════════════
 # TAB 5 — DATA EXPLORER
@@ -557,7 +554,7 @@ with tab5:
         view_df = view_df[view_df["Cluster"] == c_idx]
 
     st.markdown(f"**{len(view_df):,} rows**")
-    st.dataframe(view_df.reset_index(drop=True), use_container_width=True, height=420)
+    st.dataframe(view_df.reset_index(drop=True), width='stretch', height=420)
 
     # Download
     csv_bytes = view_df.to_csv(index=False).encode()
@@ -570,4 +567,4 @@ with tab5:
 
     st.markdown("---")
     st.markdown("## Raw Dataset Preview")
-    st.dataframe(df_raw.head(50), use_container_width=True, height=300)
+    st.dataframe(df_raw.head(50), width='stretch', height=300)
