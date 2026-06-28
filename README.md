@@ -32,8 +32,7 @@ A **Streamlit-based interactive dashboard** is built on top of the model to visu
 ## 🚀 Live Application
 
 🔗 **Live Demo:**  
-https://smartcart-segmentation-izzmvczh59ac6rdvk8bw9p.streamlit.app/
-
+https://smartcart-customer-segmentation-system-d4candfhkibfnvmsvfm8hd.streamlit.app/
 ---
 
 
