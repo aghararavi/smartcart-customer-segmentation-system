@@ -327,20 +327,22 @@ h3{
 /* ===============================
    HIDE STREAMLIT
 ================================ */
-
-#MainMenu,
-footer,
-header{
-
-    visibility:hidden;
-
+#MainMenu {
+    display: none;
 }
 
-[data-testid="stDecoration"]{
-
-    display:none;
-
+footer {
+    display: none;
 }
+
+[data-testid="stToolbar"] {
+    display: none;
+}
+
+[data-testid="stDecoration"] {
+    display: none;
+}
+
             
 /* Selectbox border */
 .stSelectbox div[data-baseweb="select"] > div {
