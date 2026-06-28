@@ -1,7 +1,3 @@
-"""
-SmartCart Clustering System — Streamlit Dashboard
-Run: streamlit run smartcart_app.py
-"""
 
 import streamlit as st
 import pandas as pd
@@ -16,69 +12,352 @@ from sklearn.metrics import silhouette_score
 
 # ── Page Config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="SmartCart Clustering",
+    page_title="SmartCart Customer Segmentation System",
     page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-/* -------- BACKGROUND -------- */
-.stApp {
-    background-color: #f8fafc;
+
+/* ===============================
+   IMPORT FONT
+================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html, body, [class*="css"]{
+    font-family:'Inter',sans-serif;
+    color:#1E293B;
 }
 
-/* -------- SIDEBAR -------- */
-[data-testid="stSidebar"] {
-    background-color: #ffffff;
-    border-right: 1px solid #e5e7eb;
+/* ===============================
+   APP BACKGROUND
+================================ */
+
+.stApp{
+    background:#f8fafc;
 }
 
-/* -------- TEXT -------- */
-html, body, [class*="css"] {
-    color: #111827;
-    font-family: 'Inter', sans-serif;
+/* ===============================
+   MAIN CONTENT
+================================ */
+
+.block-container{
+    padding-top:2rem;
+    padding-left:2rem;
+    padding-right:2rem;
+    padding-bottom:2rem;
 }
 
-/* -------- HEADINGS -------- */
-h1 { color: #111827 !important; font-weight: 700 !important; }
-h2 { color: #2563eb !important; font-weight: 600 !important; }
-h3 { color: #374151 !important; }
+/* ===============================
+   SIDEBAR
+================================ */
 
-/* -------- METRIC CARDS -------- */
-[data-testid="metric-container"] {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 14px;
-}
-[data-testid="metric-container"] label {
-    color: #6b7280 !important;
-}
-[data-testid="stMetricValue"] {
-    color: #2563eb !important;
-    font-weight: 700;
+[data-testid="stSidebar"]{
+    background:#0F4C81;
+    border-right:none;
 }
 
-/* -------- TABS -------- */
-[data-testid="stTabs"] button {
-    color: #6b7280 !important;
-}
-[data-testid="stTabs"] button[aria-selected="true"] {
-    color: #2563eb !important;
-    border-bottom: 2px solid #2563eb !important;
+[data-testid="stSidebar"] *{
+    color:white !important;
 }
 
-/* -------- TABLE -------- */
-[data-testid="stDataFrame"] {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+[data-testid="stSidebar"] hr{
+    border-color:rgba(255,255,255,.2);
 }
 
-/* -------- REMOVE BRANDING -------- */
-#MainMenu, footer { visibility: hidden; }
+/* ===============================
+   TITLES
+================================ */
+
+h1{
+    color:#1E3A8A !important;
+    font-size:42px !important;
+    font-weight:800 !important;
+}
+
+h2{
+    color:#2563EB !important;
+    font-size:24px !important;
+    font-weight:700 !important;
+}
+
+h3{
+    color:#334155 !important;
+}
+
+/* ===============================
+   METRIC CARDS
+================================ */
+
+[data-testid="metric-container"]{
+
+    background:white;
+
+    border-radius:18px;
+
+    border:1px solid #E2E8F0;
+
+    padding:22px;
+
+    box-shadow:
+        0 6px 18px rgba(15,23,42,.08);
+
+    transition:.25s;
+
+}
+
+[data-testid="metric-container"]:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#2563EB;
+
+    box-shadow:
+        0 12px 24px rgba(37,99,235,.15);
+
+}
+
+[data-testid="metric-container"] label{
+
+    color:#64748B !important;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+[data-testid="stMetricValue"]{
+
+    color:#2563EB !important;
+
+    font-size:34px !important;
+
+    font-weight:800;
+
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+
+.stButton button{
+
+    background:linear-gradient(90deg,#2563EB,#4F46E5);
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:10px 18px;
+
+    font-weight:600;
+
+}
+
+.stButton button:hover{
+
+    background:linear-gradient(90deg,#1D4ED8,#4338CA);
+
+}
+
+/* ===============================
+   SELECT BOX
+================================ */
+
+.stSelectbox div[data-baseweb="select"]{
+
+    background:white;
+
+    border-radius:12px;
+
+    border:1px solid #CBD5E1;
+
+}
+
+/* ===============================
+   SLIDER
+================================ */
+
+.stSlider{
+
+    padding-top:8px;
+
+}
+
+/* ===============================
+   TABS
+================================ */
+
+[data-testid="stTabs"]{
+
+    gap:12px;
+
+}
+
+[data-testid="stTabs"] button{
+
+    background:white;
+
+    color:#64748B;
+
+    border-radius:10px;
+
+    border:1px solid #E2E8F0;
+
+    padding:10px 20px;
+
+}
+
+[data-testid="stTabs"] button:hover{
+
+    background:#EFF6FF;
+
+}
+
+[data-testid="stTabs"] button[aria-selected="true"]{
+
+    background:#2563EB;
+
+    color:white !important;
+
+    border:none;
+
+}
+
+/* ===============================
+   DATAFRAME
+================================ */
+
+[data-testid="stDataFrame"]{
+
+    background:white;
+
+    border-radius:16px;
+
+    border:1px solid #E2E8F0;
+
+    overflow:hidden;
+
+}
+
+/* ===============================
+   PLOTLY
+================================ */
+
+[data-testid="stPlotlyChart"]{
+
+    background:white;
+
+    border-radius:18px;
+
+    border:1px solid #E2E8F0;
+
+    padding:15px;
+
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
+
+}
+
+/* ===============================
+   INFO BOX
+================================ */
+
+.info-box{
+
+    background:#EFF6FF;
+
+    border-left:5px solid #2563EB;
+
+    color:#1E293B;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-top:12px;
+
+}
+
+/* ===============================
+   BADGES
+================================ */
+
+.cluster-badge{
+
+    display:inline-block;
+
+    background:#DBEAFE;
+
+    color:#1D4ED8;
+
+    padding:6px 14px;
+
+    border-radius:50px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+/* ===============================
+   SCROLLBAR
+================================ */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#94A3B8;
+
+    border-radius:10px;
+
+}
+            
+
+/* ===============================
+   HIDE STREAMLIT
+================================ */
+
+#MainMenu,
+footer,
+header{
+
+    visibility:hidden;
+
+}
+
+[data-testid="stDecoration"]{
+
+    display:none;
+
+}
+            
+/* Selectbox border */
+.stSelectbox div[data-baseweb="select"] > div {
+    background:#3F5CD4 !important;
+    border: none !important;   
+    border-radius: 12px !important;
+    box-shadow: none !important;           
+    outline: none !important;
+}
+
+/* On focus */
+.stSelectbox div[data-baseweb="select"] > div:focus-within {
+    border: 1px solid #2563EB !important;   /* Blue border */
+    box-shadow: none !important;
+    outline: none !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -197,8 +476,8 @@ with st.sidebar:
 
 
 # ── HEADER ────────────────────────────────────────────────────────────────────
-st.markdown("# 🛒 SmartCart Clustering System")
-st.markdown("Customer segmentation using unsupervised machine learning · KMeans & Agglomerative")
+st.markdown("# 🛒 SmartCart Customer Segmentation System")
+st.markdown("Customer segmentation using unsupervised machine learning · KMeans & Agglomerative(Clustering)")
 st.markdown("---")
 
 
@@ -418,10 +697,10 @@ with tab2:
     fig.update_yaxes(gridcolor="#1e2a40", secondary_y=False)
     fig.update_yaxes(gridcolor="#1e2a40", secondary_y=True)
     st.plotly_chart(fig, width="stretch")
-
 # ═══════════════════════════════════════════════════════════════
 # TAB 3 — K SELECTION
-# ══════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
+with tab3:
     st.markdown("## Optimal K — Elbow & Silhouette")
 
     with st.spinner("Computing scores for k = 2…10 …"):
@@ -456,7 +735,7 @@ with tab2:
     fig.update_xaxes(gridcolor="#1e2a40", title="Number of Clusters (k)")
     fig.update_yaxes(gridcolor="#1e2a40", title="WCSS", secondary_y=False)
     fig.update_yaxes(title="Silhouette Score", secondary_y=True)
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
     # Table
     k_df = pd.DataFrame({
@@ -465,7 +744,7 @@ with tab2:
         "Silhouette": [round(s, 4) for s in sil],
     })
     k_df["Selected"] = k_df["k"].apply(lambda x: "✅" if x == n_clusters else "")
-    st.dataframe(k_df.set_index("k"), width="stretch")
+    st.dataframe(k_df.set_index("k"), use_container_width=True)
 
     st.markdown("""
     <div class="info-box">
