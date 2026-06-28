@@ -322,28 +322,7 @@ h3{
     border-radius:10px;
 
 }
-            
 
-/* ===============================
-   HIDE STREAMLIT
-================================ */
-#MainMenu {
-    display: none;
-}
-
-footer {
-    display: none;
-}
-
-[data-testid="stToolbar"] {
-    display: none;
-}
-
-[data-testid="stDecoration"] {
-    display: none;
-}
-
-            
 /* Selectbox border */
 .stSelectbox div[data-baseweb="select"] > div {
     background:#3F5CD4 !important;
@@ -358,6 +337,18 @@ footer {
     border: 1px solid #2563EB !important;   /* Blue border */
     box-shadow: none !important;
     outline: none !important;
+}
+            
+/* Force sidebar toggle to appear */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"]{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:fixed !important;
+    top:12px !important;
+    left:12px !important;
+    z-index:999999 !important;
 }
 
 </style>
